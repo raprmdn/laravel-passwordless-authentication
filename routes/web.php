@@ -13,6 +13,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return inertia('Index');
-});
+Route::get('/', \App\Http\Controllers\IndexController::class)
+    ->name('index')->middleware('guest');
