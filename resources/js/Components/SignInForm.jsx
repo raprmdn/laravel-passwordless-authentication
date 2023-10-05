@@ -1,9 +1,20 @@
 import React from 'react';
 import { EnvelopeIcon } from "@heroicons/react/24/outline/index.js";
+import { useForm } from "@inertiajs/react";
 
-export default function SignInForm() {
+export default function SignInForm({ closeModal = () => {} }) {
+    const {data, setData, post, errors, reset} = useForm({
+        email: '',
+    });
+
     const submitHandler = (e) => {
         e.preventDefault();
+        post(route('login.store'), {
+            onSuccess: () => {
+                reset();
+                closeModal();
+            }
+        });
     }
 
     return (
@@ -23,8 +34,11 @@ export default function SignInForm() {
                         className="block w-full rounded-md border border-zinc-300 py-1.5 pl-10 text-zinc-900 transition duration-300 placeholder:text-zinc-400 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-100 sm:text-sm sm:leading-6"
                         placeholder="your@email.com"
                         autoComplete="off"
+                        value={data.email}
+                        onChange={(e) => setData('email', e.target.value)}
                     />
                 </div>
+                {errors.email && <p className="mt-2 text-xs text-red-600">{errors.email}</p>}
                 <div className="text-xs mt-2">
                     <span className="text-zinc-500">
                         We'll send you a magic link to sign in.
